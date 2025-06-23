@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelKu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="provinsi.js"></script>
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff3e9d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --footer-bg: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Map Container Styles */
+        .map-container {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 300px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .location-section {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .location-title {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .location-title i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        /* Rest of your existing styles... */
+        /* ===== NAVBAR ===== */
+        nav {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #ffcc00;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a i {
+            margin-right: 8px;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        /* ===== ENHANCED PROFILE MENU ===== */
+        .profile-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 25px;
+        }
+
+        .profile-pic {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+            border-color: #ffcc00;
+        }
+
+        .menu-toggle {
+            font-size: 26px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-left: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-toggle:hover {
+            color: #ffcc00;
+            transform: rotate(90deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 240px;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.25s ease-out;
+            border: 1px solid #f0f0f0;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-header {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .dropdown-header img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-header div {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .dropdown-header small {
+            display: block;
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            color: #444;
+            display: flex;
+            align-items: center;
+            transition: all 0.25s ease;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .dropdown-item i {
+            margin-right: 14px;
+            color: var(--primary);
+            font-size: 18px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(to right, rgba(106, 17, 203, 0.05), white);
+            color: var(--primary);
+            padding-left: 22px;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #f0f0f0;
+            margin: 5px 0;
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        .dropdown-menu::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid white;
+        }
+
+        @keyframes festiveBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .dropdown-item:hover i {
+            animation: festiveBounce 0.4s ease;
+            color: var(--accent);
+        }
+
+        /* Fallback jika gambar tidak load */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 62, 157, 0.3);
+        }
+
+        /* ===== TICKET FORM ===== */
+        .ticket-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 100px;
+            margin-bottom: 100px;
+            transform: translateY(-0px);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        #totalPrice {
+            font-size: 24px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .btn-submit {
+            margin-top: 20px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.2);
+        }
+
+        /* === CONFIRMATION STYLE === */
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .confirmation-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            animation: bounceIn 0.6s;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--footer-bg);
+            color: white;
+            padding: 20px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f8f8f8;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .footer-section i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 5px 10px;
+            }
+
+            .hero {
+                height: 400px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .ticket-section {
+                transform: translateY(0);
+                padding: 30px 20px;
+            }
+
+            .confirmation-box {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .map-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-bus"></i>
+                <span>TravelKu</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="bus.html"><i class="fas fa-home"></i> Beranda</a></li>
+                <li><a href="tentang.html"><i class="fas fa-info-circle"></i> Tentang Kami</a></li>
+                <li><a href="rute.html"><i class="fas fa-route"></i> Rute & Jadwal</a></li>
+                <li><a href="#kontak"><i class="fas fa-phone"></i> Kontak</a></li>
+            </ul>
+            <!-- Tambahkan ini di sebelah kanan nav-links -->
+            <div class="profile-menu">
+                <img src="https://ui-avatars.com/api/?name=User&background=6a11cb&color=fff" alt="Profile"
+                    class="profile-pic" id="profilePicture">
+                <div class="menu-toggle">☰</div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-header">
+                        <img src="" alt="Profile" id="dropdownProfilePic">
+                        <div>
+                            <div id="dropdownUsername">User</div>
+                            <small id="dropdownEmail">user@example.com</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-item" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-camera"></i> Ganti Foto
+                    </div>
+                    <input type="file" id="fileInput" class="hidden-file-input" accept="image/*">
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Pesan Tiket Bus Online</h1>
+            <p>Nikmati perjalanan nyaman dengan harga terjangkau ke 15 provinsi di Indonesia</p>
+            <a href="#pesan" class="btn"><i class="fas fa-ticket-alt"></i> Pesan Sekarang</a>
+        </div>
+    </section>
+
+    <!-- Ticket Form Section -->
+    <div class="container">
+        <section id="pesan" class="ticket-section">
+            <div class="section-title">
+                <h2>Form Pemesanan Tiket</h2>
+            </div>
+
+            <form id="ticketForm">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Nama Pemesan:</label>
+                    <input type="text" id="name" placeholder="Masukkan nama lengkap" required>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email/No. HP:</label>
+                    <input type="text" id="email" placeholder="contoh: email@domain.com / 08123456789" required>
+                </div>
+
+                <!-- Lokasi Perjalanan dengan Peta -->
+                <div class="location-section">
+                    <h3 class="location-title"><i class="fas fa-map-marked-alt"></i> Lokasi Perjalanan</h3>
+
+                    <!-- Interactive Google Maps -->
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8160904.649433423!2d113.4578125!3d-2.1088866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4c07d7496404b7%3A0xe37b4de71badf485!2sIndonesia!5e0!3m2!1sen!2sid!4v1624340000000!5m2!1sen!2sid"
+                            allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <!-- Provinsi Selection -->
+                    <div class="form-group">
+                        <label for="origin"><i class="fas fa-map-marker-alt"></i> Provinsi Asal:</label>
+                        <select id="origin" required>
+                            <option value="">Pilih Provinsi</option>
+                            <script>
+                                DAFTAR_PROVINSI.forEach(provinsi => {
+                                    document.write(`<option value="${provinsi}">${provinsi}</option>`);
+                                });
+                            </script>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="province"><i class="fas fa-map-marker-alt"></i> Provinsi Tujuan:</label>
+                        <select id="province" required>
+                            <option value="">Pilih Provinsi</option>
+                            <script>
+                                DAFTAR_PROVINSI.forEach(provinsi => {
+                                    document.write(`<option value="${provinsi}">${provinsi}</option>`);
+                                });
+                            </script>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passengers"><i class="fas fa-users"></i> Jumlah Penumpang:</label>
+                    <input type="number" id="passengers" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="date"><i class="fas fa-calendar-day"></i> Tanggal Keberangkatan:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Total Harga:</label>
+                    <div id="totalPrice">Rp75.000</div>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Pesan sekarang</button>
+            </form>
+        </section>
+    </div>
+    
+    <!-- Confirmation Overlay -->
+    <div class="confirmation-overlay" id="confirmationOverlay">
+        <div class="confirmation-box">
+            <div class="checkmark">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 style="color: #4CAF50;">Pemesanan Berhasil!</h2>
+            <p>Tiket Anda telah diproses dengan ID: <strong id="ticketId"></strong></p>
+            <p>Silakan cek ke halaman <a href="rute.html" style="color: #6a11cb; text-decoration: underline;">Rute &
+                    Jadwal</a></p>
+            <button onclick="closeConfirmation()"
+                style="margin-top: 20px; padding: 10px 20px; background: #6a11cb; color: white; border: none; border-radius: 5px; cursor: pointer;">Tutup</button>
+        </div>
+    </div>
+    <footer>
+        <footer id="kontak"></footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Tentang Kami</h3>
+                <p><i class="fas fa-info-circle"></i> TravelKu adalah penyedia layanan tiket bus terpercaya sejak 2025.
+                </p>
+            </div>
+            <div class="footer-section">
+                <h3>Kontak</h3>
+                <p><i class="fas fa-phone"></i>+62 851-8455-4594</p>
+                <p><i class="fas fa-envelope"></i> info@travelku.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Raya Bus No. 123, Jakarta</p>
+            </div>
+            <div class="footer-section">
+                <h3>Sosial Media</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/rbyf20/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+                <p style="margin-top: 15px;"><i class="fas fa-hashtag"></i> #TravelKuBersama</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 TravelKu. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize elements
+        const passengersInput = document.getElementById('passengers');
+        const totalPriceDiv = document.getElementById('totalPrice');
+        const ticketForm = document.getElementById('ticketForm');
+
+        // Set initial values
+        document.addEventListener('DOMContentLoaded', function () {
+            updatePrice(); // Initialize price display
+            setupProfileMenu();
+        });
+
+        // Price calculation
+        function updatePrice() {
+            const passengers = parseInt(passengersInput.value) || 0;
+            const pricePerPassenger = 75000;
+            const totalPrice = passengers * pricePerPassenger;
+            totalPriceDiv.textContent = passengers === 0 ? "Rp0" : `Rp${totalPrice.toLocaleString('id-ID')}`;
+        }
+
+        // Form submission
+        ticketForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validate passengers
+            const passengers = parseInt(passengersInput.value);
+            if (passengers <= 0 || isNaN(passengers)) {
+                alert("Jumlah penumpang harus lebih dari 0!");
+                return false;
+            }
+
+            // Process ticket
+            try {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) throw new Error("Anda belum login");
+
+                // Validate required fields
+                if (!document.getElementById('name').value ||
+                    !document.getElementById('province').value) {
+                    throw new Error("Harap isi semua field");
+                }
+
+                // Create ticket
+                const ticketId = 'TKT-' + Date.now().toString().slice(-6);
+                const newTicket = {
+                    id: ticketId,
+                    nama: document.getElementById('name').value,
+                    email: currentUser,
+                    asal: document.getElementById('origin').value,
+                    tujuan: document.getElementById('province').value,
+                    penumpang: passengers,
+                    tanggal: document.getElementById('date').value,
+                    harga: document.getElementById('totalPrice').textContent,
+                    waktu: new Date().toLocaleString(),
+                    status: 'Belum pesan'
+                };
+
+                // Save to localStorage
+                const userKey = `travelku_tickets_${currentUser}`;
+                const existingTickets = JSON.parse(localStorage.getItem(userKey)) || [];
+                existingTickets.push(newTicket);
+                localStorage.setItem(userKey, JSON.stringify(existingTickets));
+
+                // Show confirmation
+                showConfirmation(ticketId);
+                setTimeout(() => {
+                    resetForm();
+                }, 3000);
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+
+        // Reset form
+        function resetForm() {
+            ticketForm.reset();
+            passengersInput.value = 0;
+            totalPriceDiv.textContent = 'Rp0';
+        }
+
+        // Confirmation functions
+        function showConfirmation(ticketId) {
+            document.getElementById('ticketId').textContent = ticketId;
+            document.getElementById('confirmationOverlay').style.display = 'flex';
+        }
+
+        function closeConfirmation() {
+            document.getElementById('confirmationOverlay').style.display = 'none';
+        }
+        function setupProfileMenu() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) return;
+
+            // Ambil data profil dari localStorage
+            const userProfile = JSON.parse(localStorage.getItem(`user_profile_${currentUser}`)) || {
+                photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.split('@')[0])}&background=6a11cb&color=fff`,
+                username: currentUser.split('@')[0]
+            };
+            document.getElementById('profilePicture').src = userProfile.photo;
+            document.getElementById('dropdownProfilePic').src = userProfile.photo;
+            document.getElementById('dropdownEmail').textContent = currentUser;
+            document.getElementById('dropdownUsername').textContent = userProfile.username;
+
+            // Toggle menu
+            document.querySelector('.menu-toggle').addEventListener('click', function (e) {
+                e.stopPropagation();
+                document.getElementById('dropdownMenu').classList.toggle('show');
+            });
+
+            // Profile picture change
+            document.getElementById('fileInput').addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const imgUrl = event.target.result;
+
+                        // Update profile data
+                        const updatedProfile = {
+                            ...userProfile,
+                            photo: imgUrl
+                        };
+                        localStorage.setItem(`user_profile_${currentUser}`, JSON.stringify(updatedProfile));
+
+                        // Update UI
+                        document.getElementById('profilePicture').src = imgUrl;
+                        document.getElementById('dropdownProfilePic').src = imgUrl;
+                        document.getElementById('dropdownMenu').classList.remove('show');
+                        showNotification('Foto profil berhasil diubah!');
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        // Notification system
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = '#4CAF50';
+            notification.style.color = 'white';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '1000';
+            notification.style.animation = 'fadeIn 0.3s';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        // Event listeners
+        passengersInput.addEventListener('input', updatePrice);
+        document.querySelector('.confirmation-box button').addEventListener('click', closeConfirmation);
+        document.getElementById('dropdownMenu').querySelectorAll('.dropdown-item')[1].addEventListener('click', logout);
+    </script>
+</body>
+</html>

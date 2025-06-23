@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - TravelKu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .register-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #6a11cb;
+      text-align: center;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #6a11cb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #5013a2;
+    }
+    p {
+      text-align: center;
+      margin-top: 16px;
+    }
+    a {
+      color: #6a11cb;
+      text-decoration: none;
+    }
+    .confirmation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .confirmation-box {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      animation: fadeIn 0.3s ease;
+    }
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #4CAF50;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 40px;
+      animation: bounceIn 0.6s;
+    }
+    @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2>Daftar Akun</h2>
+    <form id="registerForm">
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <div class="input-group">
+        <label for="confirmPassword">Konfirmasi Password</label>
+        <input type="password" id="confirmPassword" required>
+      </div>
+      <button type="submit">Daftar</button>
+      <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+    </form>
+  </div>
+
+  <div class="confirmation-overlay" id="registerSuccessOverlay">
+    <div class="confirmation-box">
+      <div class="checkmark">
+        <i class="fas fa-check"></i> 
+      </div>
+      <h2 style="color: #4CAF50;">Registrasi Berhasil!</h2>
+      <p>Anda akan diarahkan ke halaman login...</p>
+      <button onclick="closeConfirmation()" style="margin-top: 20px; padding: 10px 20px; background: #6a11cb; color: white; border: none; border-radius: 5px; cursor: pointer;">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+   
+   function closeConfirmation() {
+  document.getElementById('registerSuccessOverlay').style.display = 'none';
+  window.location.href = 'login.html';
+}
+   document.getElementById('registerForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  if (password !== confirmPassword) {
+    alert("Password dan konfirmasi tidak cocok.");
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('travelku_users')) || [];
+
+  const existingUser = users.find(u => u.email === email);
+  if (existingUser) {
+    alert("Email sudah terdaftar.");
+    return;
+  }
+
+  users.push({ email, password });
+  localStorage.setItem('travelku_users', JSON.stringify(users));
+  
+  // Inisialisasi profil user baru
+  const defaultProfile = {
+    email: email,
+    photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=6a11cb&color=fff`,
+    username: email.split('@')[0]
+  };
+  localStorage.setItem(`user_profile_${email}`, JSON.stringify(defaultProfile));
+
+  document.getElementById('registerSuccessOverlay').style.display = 'flex';
+
+  setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 3000);
+});
+  </script>
+</body>
+</html>

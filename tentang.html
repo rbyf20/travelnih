@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Kami - TravelKu</title>
+    <link rel="preload" href="2584.jpg" as="image">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff3e9d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #ffcc00;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a i {
+            margin-right: 8px;
+        }
+
+        .nav-links a.active {
+            color: #ffcc00;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .about-hero {
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center 70%;
+            background-repeat: no-repeat;
+
+            height: 500px;
+            display: flex;
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .about-hero .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(106, 17, 203, 0.1);
+            transition: all 0.3s;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(106, 17, 203, 0.2);
+        }
+
+        .stats-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .stats-card h3 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stats-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .testimoni-section {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+
+        .testimoni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimoni-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+
+        .testimoni-text {
+            font-style: italic;
+            margin: 20px 0 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimoni-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .testimoni-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .feature-section {
+            padding: 80px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(106, 17, 203, 0.1);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            background: linear-gradient(to right, rgba(106, 17, 203, 0.02), white);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .testimoni-card:hover .testimoni-author {
+            transform: translateY(-15px);
+            transition: all 0.3s ease;
+        }
+
+        .testimoni-author {
+            transition: all 0.3s ease;
+            /* Animasi smooth */
+            background: white;
+            padding: 10px;
+            border-radius: 50px;
+            margin-top: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 20px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f8f8f8;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .footer-section i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.6s;
+        }
+
+        .about-hero h1,
+        .about-hero p {
+            opacity: 0;
+           
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 5px 15px;
+            }
+
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container navbar">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
+                    <span>TravelKu</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="bus.html"><i class="fas fa-home"></i> Beranda</a></li>
+                    <li><a href="tentang.html" class="active"><i class="fas fa-info-circle"></i> Tentang Kami</a></li>
+                    <li><a href="rute.html"><i class="fas fa-route"></i> Rute & Jadwal</a></li>
+                    <li><a href="#kontak"><i class="fas fa-phone"></i> Kontak</a></li>
+                </ul>
+            </div>
+    </nav>
+
+    <section class="about-hero">
+        <div class="container">
+            <h1 class="fade-in">Lebih Dari Sekedar Bus</h1>
+            <p class="fade-in delay-1">Kami adalah partner perjalanan terpercaya yang menghubungkan Anda ke seluruh
+                Indonesia dengan kenyamanan premium sejak 2025.</p>
+        </div>
+    </section>
+    
+    <section class="container">
+        <div class="stats-grid">
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <h3>50+</h3>
+                <p>Armada Bus</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3>15</h3>
+                <p>Provinsi Terjangkau</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-smile"></i>
+                </div>
+                <h3>10K+</h3>
+                <p>Pelanggan Bahagia</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <h3>100+</h3>
+                <p>Rute Harian</p>
+            </div>
+        </div>
+    </section>
+    <section class="testimoni-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary);">Developer web</h2>
+            <div class="testimoni-grid">
+                <div class="testimoni-card">
+                    <div class="quote-icon">“</div>
+                    <p class="testimoni-text">"Dari kota ke desa, dari gunung ke pantai, roda bus ini lukiskan Indonesia
+                        yang sesungguhnya."</p>
+                    <div class="testimoni-author">
+                        <img src="fuji.jpg" alt="Customer">
+                        <div>
+                            <h4>Yusriana Megasari</h4>
+                            <p>202243500896</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimoni-card">
+                    <div class="quote-icon">“</div>
+                    <p class="testimoni-text">"Bus bukan cuma kendaraan, itu cerita berjalan yang menghubungkan mimpi ke
+                        destinasi."</p>
+                    <div class="testimoni-author">
+                        <img src="sasuke.jpg" alt="Customer">
+                        <div>
+                            <h4>Rabby Fajarianka</h4>
+                            <p>202243500883</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimoni-card">
+                    <div class="quote-icon">“</div>
+                    <p class="testimoni-text">"Layaknya bus yang selalu sampai tujuan. Santai saja, selamat nikmati
+                        perjalanannya."</p>
+                    <div class="testimoni-author">
+                        <img src="anime.jpg" alt="Customer">
+                        <div>
+                            <h4>Diah Ayu Rahmawati</h4>
+                            <p>202243500886</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="feature-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Keunggulan Kami</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 40px; color: #666;">Berbagai fasilitas
+                premium yang membuat perjalanan Anda lebih nyaman</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>Free WiFi</h3>
+                    <p>Internet cepat gratis sepanjang perjalanan dengan bandwidth premium.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>Charging Port</h3>
+                    <p>Port USB di setiap kursi untuk mengisi daya gadget Anda.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Makan Gratis</h3>
+                    <p>Snack dan minuman gratis untuk perjalanan di atas 5 jam.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <h3>Hiburan</h3>
+                    <p>LCD dengan film pilihan dan musik terbaru.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <footer id="kontak"></footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tentang Kami</h3>
+                    <p><i class="fas fa-info-circle"></i> TravelKu adalah penyedia layanan tiket bus terpercaya sejak
+                        2025.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Kontak</h3>
+                    <p><i class="fas fa-phone"></i> +62 851-8455-4594</p>
+                    <p><i class="fas fa-envelope"></i> info@travelku.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl. Raya Bus No. 123, Jakarta</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Sosial Media</h3>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/ysr_nanaaa/"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <p style="margin-top: 15px;"><i class="fas fa-hashtag"></i> #TravelKuBersama</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 TravelKu. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
