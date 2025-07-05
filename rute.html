@@ -742,7 +742,7 @@
                 <div class="footer-section">
                     <h3>Tentang Kami</h3>
                     <p><i class="fas fa-info-circle"></i> TravelKu adalah penyedia layanan tiket bus terpercaya sejak
-                        2010.</p>
+                        2025.</p>
                 </div>
                 <div class="footer-section" id="kontak">  
                     <h3>Kontak</h3>
@@ -766,7 +766,6 @@
     </footer>
     <script src="provinsi.js"></script>
     <script>
-        // Fungsi untuk memuat data tiket berdasarkan akun yang login
         function loadTicketData() {
             try {
                 // 1. Ambil akun yang sedang login
@@ -775,21 +774,15 @@
                     document.getElementById('ticketData').innerHTML = '<p class="no-data">Silakan login terlebih dahulu untuk melihat data tiket Anda.</p>';
                     return;
                 }
-
-                // 2. Ambil data dari localStorage dengan key spesifik untuk user ini
                 const userKey = `travelku_tickets_${currentUser}`;
                 const rawData = localStorage.getItem(userKey);
                 const ticketData = rawData ? JSON.parse(rawData) : [];
 
                 const container = document.getElementById('ticketData');
-
-                // 3. Cek jika tidak ada data
                 if (ticketData.length === 0) {
                     container.innerHTML = '<p class="no-data">Belum ada data pemesanan tiket.</p>';
                     return;
                 }
-
-                // 4. Tampilkan data dalam tabel
                 let html = `
                     <table>
                         <thead>
@@ -844,7 +837,7 @@
                 container.innerHTML = '<p class="no-data error">Gagal memuat data. Error: ' + error.message + '</p>';
             }
         }
-        // Fungsi untuk menampilkan animasi sukses
+   
         function payTicket(ticketId) {
     try {
         const currentUser = localStorage.getItem('currentUser');
@@ -863,17 +856,15 @@
         }
 
         showConfirm(
-            'Konfirmasi Pemesanan', // Ubah teks konfirmasi
+            'Konfirmasi Pemesanan', 
             `Apakah Anda yakin ingin memesan tiket ${ticketId} sebesar ${tickets[ticketIndex].harga}?`,
             (confirmed) => {
                 if (confirmed) {
                     tickets[ticketIndex].status = 'Dipesan';
                     localStorage.setItem(userKey, JSON.stringify(tickets));
                     
-                    // Update tampilan
                     updateActionButtons(ticketId, tickets[ticketIndex]);
-                    
-                    // Tampilkan bukti pemesanan
+
                     showPaymentReceipt(tickets[ticketIndex]);
                 }
             }
@@ -890,15 +881,12 @@
 
             messageElement.textContent = message;
             animation.style.display = 'block';
-
-            // Sembunyikan setelah 2 detik
             setTimeout(() => {
                 animation.style.display = 'none';
             }, 2000);
         }
         let confirmCallback = null;
 
-        // Fungsi untuk menampilkan modal konfirmasi
         function showConfirm(title, message, callback) {
             document.getElementById('confirmTitle').textContent = title;
             document.getElementById('confirmMessage').textContent = message;
@@ -906,7 +894,6 @@
             document.getElementById('confirmModal').style.display = 'flex';
         }
 
-        // Event listeners untuk modal konfirmasi
         document.getElementById('confirmCancel').addEventListener('click', () => {
             document.getElementById('confirmModal').style.display = 'none';
             confirmCallback = null;
@@ -937,7 +924,6 @@
                         localStorage.setItem(userKey, JSON.stringify(updatedTickets));
                         loadTicketData();
 
-                        // Tampilkan animasi sukses
                         showSuccessAnimation('Tiket berhasil dihapus!');
                     }
                 }
@@ -960,48 +946,40 @@
             }
 
             currentEditingTicketId = ticketId;
-
-            // Isi form dengan data tiket
             document.getElementById('editNama').value = ticket.nama;
             document.getElementById('editTanggal').value = ticket.tanggal;
             document.getElementById('editPenumpang').value = ticket.penumpang;
 
-            // Fungsi auto-hitung harga
+     
             const hitungHarga = () => {
                 const jumlah = parseInt(document.getElementById('editPenumpang').value) || 0;
-                const hargaTotal = jumlah * 75000; // 75rb per penumpang
+                const hargaTotal = jumlah * 75000; 
                 document.getElementById('editHarga').value = hargaTotal.toLocaleString('id-ID');
             };
 
-            // Hitung harga awal
             hitungHarga();
-
-            // Auto-update saat jumlah penumpang berubah
             document.getElementById('editPenumpang').addEventListener('input', hitungHarga);
 
-            // Isi dropdown provinsi
             const asalSelect = document.getElementById('editAsal');
             const tujuanSelect = document.getElementById('editTujuan');
 
-            // Kosongkan dropdown
             asalSelect.innerHTML = '<option value="">Pilih Asal</option>';
             tujuanSelect.innerHTML = '<option value="">Pilih Tujuan</option>';
 
-            // Isi dropdown dengan DAFTAR_PROVINSI
             DAFTAR_PROVINSI.forEach(provinsi => {
                 asalSelect.add(new Option(provinsi, provinsi));
                 tujuanSelect.add(new Option(provinsi, provinsi));
             });
 
-            // Set nilai default
+        
             asalSelect.value = ticket.asal;
             tujuanSelect.value = ticket.tujuan;
 
-            // Tampilkan modal
+            
             document.getElementById('editModal').style.display = 'flex';
         }
 
-        // Modifikasi form submission untuk edit
+     
         document.getElementById('editForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -1022,7 +1000,7 @@
                 return;
             }
 
-            // Update data tiket
+         
             tickets[ticketIndex] = {
                 ...tickets[ticketIndex],
                 nama: document.getElementById('editNama').value,
@@ -1033,16 +1011,13 @@
                 harga: document.getElementById('editHarga').value
             };
 
-            // Simpan ke localStorage
+            
             localStorage.setItem(userKey, JSON.stringify(tickets));
 
-            // Reload data
             loadTicketData();
 
-            // Tutup modal
             closeEditModal();
 
-            // Tampilkan animasi sukses
             showSuccessAnimation('Data berhasil diperbarui!');
         });
 
@@ -1051,10 +1026,9 @@
     
     rows.forEach(row => {
         if (row.cells[0].textContent === ticketId) {
-            // Update kolom status
+            
             row.cells[7].innerHTML = '<span class="status status-booked">Dipesan</span>';
             
-            // Update kolom aksi
             row.cells[8].innerHTML = `
                 <button class="action-btn" onclick="showPaymentReceipt(${JSON.stringify(ticket).replace(/"/g, '&quot;')})">
                     <i class="fas fa-print"></i> Cetak
@@ -1085,45 +1059,40 @@
 
             currentEditingTicketId = ticketId;
 
-            // Isi form dengan data tiket
+        
             document.getElementById('editNama').value = ticket.nama;
             document.getElementById('editTanggal').value = ticket.tanggal;
             document.getElementById('editPenumpang').value = ticket.penumpang;
 
-            // Fungsi auto-hitung harga
             const hitungHarga = () => {
                 const jumlah = parseInt(document.getElementById('editPenumpang').value) || 0;
-                const hargaTotal = jumlah * 75000; // 75rb per penumpang
+                const hargaTotal = jumlah * 75000; 
                 document.getElementById('editHarga').value = hargaTotal.toLocaleString('id-ID');
             };
 
-            // Hitung harga awal
+      
             hitungHarga();
 
-            // Auto-update saat jumlah penumpang berubah
+     
             document.getElementById('editPenumpang').addEventListener('input', hitungHarga);
-
-            // Isi dropdown provinsi
             const asalSelect = document.getElementById('editAsal');
             const tujuanSelect = document.getElementById('editTujuan');
 
-            // Kosongkan dropdown
             asalSelect.innerHTML = '<option value="">Pilih Asal</option>';
             tujuanSelect.innerHTML = '<option value="">Pilih Tujuan</option>';
 
-            // Isi dropdown dengan DAFTAR_PROVINSI
             DAFTAR_PROVINSI.forEach(provinsi => {
                 asalSelect.add(new Option(provinsi, provinsi));
                 tujuanSelect.add(new Option(provinsi, provinsi));
             });
 
-            // Set nilai default
+            
             asalSelect.value = ticket.asal;
             tujuanSelect.value = ticket.tujuan;
 
             // Tampilkan modal
             document.getElementById('editModal').style.display = 'flex';
-            console.log("Modal seharusnya muncul sekarang"); // Debugging
+            console.log("Modal seharusnya muncul sekarang"); 
         }
 
         function closeEditModal() {
@@ -1138,7 +1107,6 @@
                 });
             });
         });
-        // Handle form submission
         document.getElementById('editForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -1159,7 +1127,7 @@
                 return;
             }
 
-            // Update data tiket
+         
             tickets[ticketIndex] = {
                 ...tickets[ticketIndex],
                 nama: document.getElementById('editNama').value,
@@ -1170,16 +1138,14 @@
                 harga: document.getElementById('editHarga').value
             };
 
-            // Simpan ke localStorage
+          
             localStorage.setItem(userKey, JSON.stringify(tickets));
 
-            // Reload data
+      
             loadTicketData();
 
-            // Tutup modal
             closeEditModal();
 
-            // Tampilkan notifikasi
             alert("Perubahan berhasil disimpan!");
         });
         function showPaymentReceipt(ticket) {
